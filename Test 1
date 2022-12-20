@@ -1,6 +1,33 @@
-def gcd(a: int, b: int) -> int:
-    if a == b:
-        return a
-    elif: a > b:
-        return gcd(a - b, b)
-    return
+class Human:
+    def __init__(self, name, grade=10, letter="H", is_taken=False):
+        self.name = name
+        self.grade = grade
+        self.letter = letter
+        self.fav_subject = "Computer Science"
+        self.fav_teacher = None
+        self.is_taken = is_taken
+        self.significant_other = None
+        self.sex = "M"
+
+
+def __str__(self):
+    return f"Human: {self.name} {self.grade} {self.letter}"
+
+
+def greeting(self):
+    print(f"{self.name}" "from" "{self.grade} {self.letter} says hi!")
+
+
+def date(self, other):
+    if not self.is_taken and not other.is_taken:
+        self.is_taken = True
+        self.significant_other = other
+        other.is_taken = True
+        other.significant_other = self
+        print(f"{self.name} and {other.name} are dating!")
+    else:
+        print("Break up first!")
+
+
+classmate1 = Human("A")
+classmate2 = Human("B", is_taken=True)
