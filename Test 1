@@ -4,7 +4,7 @@ class Human:
         self.name = name
         self.grade = grade
         self.letter = letter
-        self.fav_subject = None
+        self.fav_subject = "chemistry"
         self.fav_teacher = None
         self.is_taken = is_taken
         self.significant_other = "Not taken"
@@ -14,7 +14,7 @@ class Human:
         return f"Human: {self.name} {self.grade} {self.letter}"
 
     def greet(self):
-        print(f"{self.name}  from {self.grade} {self.letter} says hi!")
+        print(f"{self.name} from {self.grade}{self.letter} says hi!")
 
     def boast(self):
         print(f"My favorite subject is {self.fav_subject}!")
@@ -36,5 +36,6 @@ class Human:
 classmate1 = Human("Cactus")
 classmate2 = Human("Vacuum", is_taken=True)
 
-
+# classmate1.boast()
+# classmate1.greet()
 # classmate1.date(classmate2)
