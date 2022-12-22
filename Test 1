@@ -1,17 +1,17 @@
 class Teacher:
-    def __init__(self, name, subject, teaches="10Н"):
+    def __init__(self, name, subject, teaches="10'Н'"):
         self.name = name
         self.subject = subject
         self.teaches = teaches
 
     def __str__(self):
-        return f"Teacher: {self.name}, teaches {self.subject}."
+        return f"Teacher: {self.name}, teaches {self.subject}, homeroom teacher of {self.teaches}."
 
     def flex(self, other):
         if self.teaches == other.teaches:
-            print(f"Our students like me more, {other.name}.")
+            print(f"{self.name}: Our students like me more, {other.name}.")
         else:
-            print(f"All my students get A's")
+            print(f"{self.name}: All \x1B[3mmy\x1B[0m students get straight A's.")
 
 
 class Student:
@@ -32,7 +32,7 @@ class Student:
         print(f"{self.name} from {self.grade}{self.letter} says hi!")
 
     def boast(self):
-        print(f"My favorite subject is {self.fav_subject}!")
+        print(f"{self.name}: My favorite subject is {self.fav_subject}!")
 
     def date(self, other):
         if self.gender == other.gender:
@@ -47,30 +47,30 @@ class Student:
             else:
                 print("Break up first!")
 
-    @staticmethod
-    def bully_s(other):
+    # @staticmethod
+    def bully_s(self, other):
         if not other.is_taken:
-            print(f"You're a single loser, {other.name}!")
+            print(f"{self.name}: You'll die alone, {other.name}.")
         else:
-            print(f"Hard to believe someone would date you, {other.name}")
+            print(f"{self.name}: Hard to believe someone would date you, {other.name}!")
 
     def bully_c(self, other):
         if self.letter == other.letter:
-            print(f"We're a better class than {other.name}'s!")
+            print(f"{self.name}: We're a better class than {other.name}'s!")
         else:
-            print(f"Your class sucks, {other.name}!")
+            print(f"{self.name}: Your class sucks, {other.name}!")
 
 
 teacher1 = Teacher("Mrs. Bottle", "Math")
-teacher2 = Teacher("Mr. Plant", "English")
+teacher2 = Teacher("Mr. Plant", "English", teaches="10'O'")
 
 student1 = Student("Cactus")
-student2 = Student("Vacuum", is_taken=True, letter="O")
+student2 = Student("Vacuum", is_taken=False, letter="O")
 
 
-print(teacher1)
-print(teacher2)
-teacher1.flex(teacher2)
+# print(teacher1)
+# print(teacher2)
+# teacher1.flex(teacher2)
 
 # print(student1)
 # student1.greet()
