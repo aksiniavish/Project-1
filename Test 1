@@ -1,17 +1,32 @@
-class Human:
+class Teacher:
+    def __init__(self, name, subject, teaches="10Н"):
+        self.name = name
+        self.subject = subject
+        self.teaches = teaches
 
-    def __init__(self, name, gender="M", grade="10", letter="H", is_taken=False):
+    def __str__(self):
+        return f"Teacher: {self.name}, teaches {self.subject}."
+
+    def flex(self, other):
+        if self.teaches == other.teaches:
+            print(f"Our students like me more, {other.name}.")
+        else:
+            print(f"All my students get A's")
+
+
+class Student:
+    def __init__(self, name, gender="M", grade="10", letter="H", is_taken=False, fav_subject=None):
         self.name = name
         self.grade = grade
         self.letter = letter
-        self.fav_subject = "chemistry"
+        self.fav_subject = fav_subject
         self.fav_teacher = None
         self.is_taken = is_taken
         self.significant_other = "Not taken"
         self.gender = gender
 
     def __str__(self):
-        return f"Human: {self.name} {self.grade} {self.letter}"
+        return f"Student: {self.name} from {self.grade}{self.letter}."
 
     def greet(self):
         print(f"{self.name} from {self.grade}{self.letter} says hi!")
@@ -32,10 +47,34 @@ class Human:
             else:
                 print("Break up first!")
 
+    @staticmethod
+    def bully_s(other):
+        if not other.is_taken:
+            print(f"You're a single loser, {other.name}!")
+        else:
+            print(f"Hard to believe someone would date you, {other.name}")
 
-classmate1 = Human("Cactus")
-classmate2 = Human("Vacuum", is_taken=True)
+    def bully_c(self, other):
+        if self.letter == other.letter:
+            print(f"We're a better class than {other.name}'s!")
+        else:
+            print(f"Your class sucks, {other.name}!")
 
-# classmate1.boast()
-# classmate1.greet()
-# classmate1.date(classmate2)
+
+teacher1 = Teacher("Mrs. Bottle", "Math")
+teacher2 = Teacher("Mr. Plant", "English")
+
+student1 = Student("Cactus")
+student2 = Student("Vacuum", is_taken=True, letter="O")
+
+
+print(teacher1)
+print(teacher2)
+teacher1.flex(teacher2)
+
+# print(student1)
+# student1.greet()
+# student1.boast()
+# student1.date(student2)
+# student1.bully_s(student2)
+# student1.bully_c(student2)
