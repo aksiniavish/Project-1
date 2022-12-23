@@ -1,6 +1,11 @@
-class Teacher:
-    def __init__(self, name, subject, teaches="10'Н'"):
+class Human:
+    def __init__(self, name):
         self.name = name
+
+
+class Teacher(Human):
+    def __init__(self, name, subject, teaches="10'Н'"):
+        super().__init__(name)
         self.subject = subject
         self.teaches = teaches
 
@@ -14,9 +19,21 @@ class Teacher:
             print(f"{self.name}: All \x1B[3mmy\x1B[0m students get straight A's.")
 
 
-class Student:
+class Parent(Human):
+    def __init__(self, name, of_student):
+        super().__init__(name)
+        self.of_student = of_student
+
+    def child_talk(self, other):
+        pass
+
+    def __str__(self):
+        return f"Parent: {self.name}."
+
+
+class Student(Human):
     def __init__(self, name, gender="M", grade="10", letter="H", is_taken=False, fav_subject=None):
-        self.name = name
+        super().__init__(name)
         self.grade = grade
         self.letter = letter
         self.fav_subject = fav_subject
@@ -31,8 +48,11 @@ class Student:
     def greet(self):
         print(f"{self.name} from {self.grade}{self.letter} says hi!")
 
-    def boast(self):
+    def fav_teacher(self):
         print(f"{self.name}: My favorite subject is {self.fav_subject}!")
+
+    def fav_subject(self):
+        pass
 
     def date(self, other):
         if self.gender == other.gender:
@@ -48,11 +68,12 @@ class Student:
                 print("Break up first!")
 
     # @staticmethod
+
     def bully_s(self, other):
         if not other.is_taken:
             print(f"{self.name}: You'll die alone, {other.name}.")
         else:
-            print(f"{self.name}: Hard to believe someone would date you, {other.name}!")
+            print(f"{self.name}: Hard to believe someone would date \x1B[3myou\x1B[0m, {other.name}!")
 
     def bully_c(self, other):
         if self.letter == other.letter:
@@ -65,8 +86,11 @@ teacher1 = Teacher("Mrs. Bottle", "Math")
 teacher2 = Teacher("Mr. Plant", "English", teaches="10'O'")
 
 student1 = Student("Cactus")
-student2 = Student("Vacuum", is_taken=False, letter="O")
+student2 = Student("Vacuum", is_taken=True, letter="O")
 
+parent1 = Parent('Headphone', student1)
+print(parent1.of_student)
+print(parent1.of_student.fav_subject)
 
 # print(teacher1)
 # print(teacher2)
@@ -77,4 +101,4 @@ student2 = Student("Vacuum", is_taken=False, letter="O")
 # student1.boast()
 # student1.date(student2)
 # student1.bully_s(student2)
-# student1.bully_c(student2)
+# student1.bully_c(student1)
