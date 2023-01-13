@@ -102,3 +102,36 @@ print(parent1.of_student.fav_subject)
 # student1.date(student2)
 # student1.bully_s(student2)
 # student1.bully_c(student1)
+
+
+
+from telegram.ext import Updater, CommandHandler, updater
+
+TOKEN = "5829498448:AAEOBJCmga8YeJGZzhJKyPEGi1mnDx9erfQ"
+
+
+def main():
+    """
+    Configurates and launches the bot
+    """
+
+    updater = Updater(token=TOKEN)
+
+    dispatcher = updater.dispatcher
+
+    dispatcher.add_handler(
+        CommandHandler("start", start_bot)
+    )
+
+    updater.start_polling()
+    updater.idle()
+
+
+def start_bot(update, context):
+    text = "Hello World!"
+    update.message.reply_text(text)
+
+
+if __name__ == "__main__":
+    main()
+    
