@@ -1,4 +1,4 @@
-from telegram import Update, ReplyKeyboardMarkup, ParseMode, ReplyKeyboardRemove
+from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, ConversationHandler
 
 from connect_to_database import register_to_db, get_user_from_db
@@ -47,11 +47,17 @@ def main():
 
 
 def do_start(update: Update, context: CallbackContext):
+    """
+    Start message
+    """
     text = "Hello! If you want a list of commands, do /help"
     update.message.reply_text(text)
 
 
 def do_help(update: Update, context: CallbackContext):
+    """
+    Sends user list of commands
+    """
     text = [
         "To register for a game of killer, do the command,",
         "/register_player",
@@ -61,6 +67,11 @@ def do_help(update: Update, context: CallbackContext):
 
 
 def ask_grade(update: Update, context: CallbackContext):
+    """
+    Asks user class
+    Returns WAIT_FOR_CLASS status
+    Goes to command get_class
+    """
     buttons = [
         [GRADES[0], GRADES[1], GRADES[2]],
         [GRADES[3], GRADES[4], GRADES[5]],
@@ -81,6 +92,11 @@ def ask_grade(update: Update, context: CallbackContext):
 
 
 def ask_name(update: Update, context: CallbackContext):
+    """
+    Asks user's name
+    Returns WAIT_FOR_NAME status
+    Goes to command get_name
+    """
     text = [
         "Enter your name, please.",
         ]
@@ -90,6 +106,11 @@ def ask_name(update: Update, context: CallbackContext):
 
 
 def ask_photo(update: Update, context: CallbackContext):
+    """
+    Asks for user's photo
+    Returns WAIT_FOR_PHOTO status
+    Goes to command get_photo
+    """
     text = [
         "Send a selfie, please.",
         ]
@@ -99,6 +120,10 @@ def ask_photo(update: Update, context: CallbackContext):
 
 
 def register_player(update: Update, context: CallbackContext):
+    """
+    Saves all parameters to test.txt through connect_to_database
+    Ends conversation
+    """
     user_id = update.message.from_user.id
     grade = context.user_data["grade"]
     name = context.user_data["name"]
@@ -116,6 +141,12 @@ def register_player(update: Update, context: CallbackContext):
 
 
 def get_grade(update: Update, context: CallbackContext):
+    """
+    Gets user class
+    Adds exception event if grade not in GRADES
+    Remembers class
+    Goes to ask user's name
+    """
     grade = update.message.text
     if grade not in GRADES:
         text = f'That grade does not exist!'\
@@ -131,6 +162,11 @@ def get_grade(update: Update, context: CallbackContext):
 
 
 def get_name(update: Update, context: CallbackContext):
+    """
+    Gets user's name
+    Remembers name
+    Goes to ask for user's photo
+    """
     name = update.message.text
     # Enter subject of the variable "name" to understand what it contains.
     print(name)
@@ -141,6 +177,11 @@ def get_name(update: Update, context: CallbackContext):
 
 
 def get_photo(update: Update, context: CallbackContext):
+    """
+    Gets what user says after photo
+    Remembers "photo"
+    Goes to ask to register
+    """
     photo = update.message.text
     # Enter subject of the variable "photo" to see what it contains.
     print(photo)
