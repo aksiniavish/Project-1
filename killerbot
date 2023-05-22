@@ -1,0 +1,156 @@
+from telegram import Update, ReplyKeyboardMarkup, ParseMode, ReplyKeyboardRemove
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, ConversationHandler
+
+from connect_to_database import register_to_db, get_user_from_db
+from key import TOKEN
+
+
+GRADES = ['8н', '8о', '8п',
+        '9н', '9о', '9п',
+        '10н', '11н',
+    ]
+
+
+WAIT_FOR_CLASS, WAIT_FOR_NAME, WAIT_FOR_PHOTO = range(3)
+
+
+def main():
+    """
+    Configures and launches bot
+    """
+    # Updater - searches for telegram message updates
+    updater = Updater(token=TOKEN)
+
+    dispatcher = updater.dispatcher
+
+    # Adding telegram dispatcher
+    dispatcher.add_handler(CommandHandler('start', do_start))
+    dispatcher.add_handler(CommandHandler('help', do_help))
+    dispatcher.add_handler(
+        ConversationHandler(
+            entry_points=[CommandHandler('register_player', ask_grade)],    # Dialogue start
+            states={
+                WAIT_FOR_CLASS: [MessageHandler(Filters.text, get_grade)],
+                WAIT_FOR_NAME: [MessageHandler(Filters.text, get_name)],
+                WAIT_FOR_PHOTO: [MessageHandler(Filters.text, get_photo)],
+            },    # State
+            fallbacks=[]    # Catches errors
+        )
+    )
+    dispatcher.add_handler(MessageHandler(Filters.text, do_help))
+
+    #  Start infinite questionnaire from telegram.
+    updater.start_polling()
+    print(updater.bot.getMe())
+    print("Bot launched.")
+    updater.idle()  # Idle looping
+
+
+def do_start(update: Update, context: CallbackContext):
+    text = "Hello! If you want a list of commands, do /help"
+    update.message.reply_text(text)
+
+
+def do_help(update: Update, context: CallbackContext):
+    text = [
+        "To register for a game of killer, do the command,",
+        "/register_player",
+    ]
+    text = "\n".join(text)
+    update.message.reply_text(text)
+
+
+def ask_grade(update: Update, context: CallbackContext):
+    buttons = [
+        [GRADES[0], GRADES[1], GRADES[2]],
+        [GRADES[3], GRADES[4], GRADES[5]],
+        [GRADES[6], GRADES[7]],
+    ]
+    keyboard = ReplyKeyboardMarkup(buttons)  # Keyboard - object of ReplyKeyboardMarkup
+    if get_user_from_db(update.message.from_user.id):
+        text = "You're already registered."
+        update.message.reply_text(text)
+        return ConversationHandler.END
+    lines = [
+        f"What grade are you in?",
+        f"Pick one of the options from the buttons below.",
+    ]
+    text = "\n".join(lines)
+    update.message.reply_text(text, reply_markup=keyboard)
+    return WAIT_FOR_CLASS
+
+
+def ask_name(update: Update, context: CallbackContext):
+    text = [
+        "Enter your name, please.",
+        ]
+    text = "\n".join(text)
+    update.message.reply_text(text)
+    return WAIT_FOR_NAME
+
+
+def ask_photo(update: Update, context: CallbackContext):
+    text = [
+        "Send a selfie, please.",
+        ]
+    text = "\n".join(text)
+    update.message.reply_text(text)
+    return WAIT_FOR_PHOTO
+
+
+def register_player(update: Update, context: CallbackContext):
+    user_id = update.message.from_user.id
+    grade = context.user_data["grade"]
+    name = context.user_data["name"]
+    photo = context.user_data["photo"]
+    register_to_db(user_id, grade, name, photo)
+    text = [
+            f"Player registered.",
+            f"Your grade is {grade}.",
+            f"Your name is {name}.",
+            f"Your photo is {photo}",
+        ]
+    text = "\n".join(text)
+    update.message.reply_text(text)
+    return ConversationHandler.END
+
+
+def get_grade(update: Update, context: CallbackContext):
+    grade = update.message.text
+    if grade not in GRADES:
+        text = f'That grade does not exist!'\
+            f' Try again.'
+        update.message.reply_text(text)
+        return WAIT_FOR_CLASS
+    else:
+        print(grade)
+        context.user_data['grade'] = grade
+        text = f'Grade registered: {grade}'
+        update.message.reply_text(text)
+        return ask_name(update, context)
+
+
+def get_name(update: Update, context: CallbackContext):
+    name = update.message.text
+    # Enter subject of the variable "name" to understand what it contains.
+    print(name)
+    context.user_data['name'] = name
+    text = f'Your name: {name}'
+    update.message.reply_text(text)
+    return ask_photo(update, context)
+
+
+def get_photo(update: Update, context: CallbackContext):
+    photo = update.message.text
+    # Enter subject of the variable "photo" to see what it contains.
+    print(photo)
+    context.user_data['photo'] = photo
+    text = f'Your photo: {photo}'
+    update.message.reply_text(text)
+    return register_player(update, context)
+
+
+if __name__ == "__main__":
+    main()
+
+# TODO add something of your own
